@@ -14,8 +14,9 @@ const isLastScene = sceneActive?.isLastScene
 const isEnd = story?.end
 
 const getLetterByIndex = (index: number) => String.fromCharCode(65 + index)
+const userChannel = user?.user?.user_metadata?.nickname.toLowerCase()
 
-// console.log({ story, dataTable })
+console.log({ story, dataTable, user: user?.user?.user_metadata, userChannel })
 ---
 
 <Layout title={story?.title}>
@@ -23,6 +24,7 @@ const getLetterByIndex = (index: number) => String.fromCharCode(65 + index)
     <input type="hidden" id="scene-active" value={sceneActiveIndex} />
     <input type="hidden" id="story-id" value={dataTable?.id} />
     <input type="hidden" id="story-slug" value={slug} />
+    <input type="hidden" id="channel" value={userChannel} />
 
     <header class="w-fit mx-auto text-center">
       <h2 class="text-8xl font-bold font-creepster text-primary">{story?.title}</h2>
@@ -137,6 +139,7 @@ const getLetterByIndex = (index: number) => String.fromCharCode(65 + index)
   const generateVideoButton = document.getElementById('generate-video-button') as HTMLButtonElement
   const videoModal = document.getElementById('video-modal') as HTMLDivElement
   const videoSummary = document.getElementById('video-summary') as HTMLVideoElement
+  const channel = document.getElementById('channel') as HTMLInputElement
 
   let countdown: NodeJS.Timeout | null = null
   let isVoting = false
@@ -155,7 +158,7 @@ const getLetterByIndex = (index: number) => String.fromCharCode(65 + index)
     userVoted = []
   }
 
-  client.connect({ channels: ['puleador'] })
+  client.connect({ channels: [channel.value] })
 
   client.on('message', data => {
     if (!isVoting) return
