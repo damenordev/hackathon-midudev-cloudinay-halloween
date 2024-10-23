@@ -1,7 +1,8 @@
 import { signInWithTwitch, signOut } from './auth.actions'
 import { generateInitialStory, generateContinueStory } from './story'
 import { generateImage } from './generate-image.actions'
-import { updateStory } from './story.actions'
+import { updateStory, createAudio, generateVideoTranscribed } from './story.actions'
+import { generateEndStory } from './story'
 
 export const server = {
   generateImage,
@@ -9,5 +10,8 @@ export const server = {
   signOut,
   generateInitialStory,
   generateContinueStory,
+  generateEndStory,
   updateStory,
+  createAudio,
+  generateVideoTranscribed,
 }

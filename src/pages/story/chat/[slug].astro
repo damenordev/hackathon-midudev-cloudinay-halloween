@@ -2,21 +2,20 @@
 import Layout from '@/layouts/Layout.astro'
 import { supabase } from '@/utils'
 
-// params url
 const { slug } = Astro.params as { slug: string }
-// query url
-const sceneActiveIndex = Number(Astro.url.searchParams.get('scene')) || 0
+const sceneActiveIndex = Number(Astro.url.searchParams.get('scene')) || 1
 
 const { data: dataTable } = await supabase.from('stories').select('*').eq('slug', slug).single()
 const { data: user } = await supabase.auth.getUser()
 
-console.log({ dataTable })
 const story = dataTable?.data
-const sceneActive = story?.scenes[sceneActiveIndex]
-
-// console.log({ sceneActive, sceneActiveIndex, dataTable })
+const sceneActive = story?.scenes[sceneActiveIndex - 1]
+const isLastScene = sceneActive?.isLastScene
+const isEnd = story?.end
 
 const getLetterByIndex = (index: number) => String.fromCharCode(65 + index)
+
+// console.log({ story, dataTable })
 ---
 
 <Layout title={story?.title}>
@@ -40,7 +39,10 @@ const getLetterByIndex = (index: number) => String.fromCharCode(65 + index)
           </p>
         </div>
         <div class="bg-card rounded-3xl p-4 pt-0 space-y-4 border-4 border-card-border">
-          <button id="start-voting-button" class="w-full bg-success text-background font-bold px-4 py-2 rounded-lg mt-4">Iniciar votación</button>
+          <button
+            id="start-voting-button"
+            class={`w-full bg-success text-background font-bold px-4 py-2 rounded-lg mt-4 ${isLastScene || isEnd ? 'hidden' : ''}`}>Iniciar votación</button
+          >
           <div id="voting-timer" class="hidden text-center">
             <span>Tiempo restante:</span>
             <span id="voting-timer-value" class="text-6xl font-bold text-success block"></span>
@@ -50,7 +52,12 @@ const getLetterByIndex = (index: number) => String.fromCharCode(65 + index)
             <span id="voting-results-value" class="text-6xl font-bold text-success block"></span>
             <button id="continue-history-button" class="w-full bg-secondary text-background font-bold px-4 py-2 rounded-lg mt-4">Continuar historia</button>
           </div>
-          <button id="end-voting-button" class="hidden w-full bg-primary text-background font-bold px-4 py-2 rounded-lg mt-4">Finalizar historia</button>
+          <button id="end-story-button" class={`w-full bg-primary text-background font-bold px-4 py-2 rounded-lg mt-4 ${isLastScene && !isEnd ? '' : 'hidden'}`}
+            >Votar y finalizar historia</button
+          >
+          <button id="generate-video-button" class={`w-full bg-primary text-background font-bold px-4 py-2 rounded-lg mt-4 ${isEnd ? '' : 'hidden'}`}
+            >Generar video resumen</button
+          >
         </div>
       </aside>
 
@@ -58,16 +65,18 @@ const getLetterByIndex = (index: number) => String.fromCharCode(65 + index)
         <div class="space-y-4">
           {sceneActive?.paragraphs.map((paragraph: string) => <p class="text-muted-foreground text-center text-lg">{paragraph}</p>)}
         </div>
-        <div class="grid grid-cols-2 gap-4">
-          {
-            sceneActive?.options.map((option: string, index: number) => (
-              <div class="bg-popover text-white px-4 py-2 rounded-lg flex items-center gap-4">
-                <span class="text-4xl font-bold text-success">{getLetterByIndex(index)}</span>
-                <span>{option}</span>
-              </div>
-            ))
-          }
-        </div>
+        {
+          sceneActive?.options && sceneActive?.options.length > 0 && (
+            <div class="grid grid-cols-2 gap-4">
+              {sceneActive?.options.map((option: string, index: number) => (
+                <div class="bg-popover text-white px-4 py-2 rounded-lg flex items-center gap-4">
+                  <span class="text-4xl font-bold text-success">{getLetterByIndex(index)}</span>
+                  <span>{option}</span>
+                </div>
+              ))}
+            </div>
+          )
+        }
       </section>
 
       <aside class="w-64">
@@ -92,13 +101,27 @@ const getLetterByIndex = (index: number) => String.fromCharCode(65 + index)
       </svg>
     </div>
   </div>
+
+  <div id="video-modal" class="hidden fixed top-0 left-0 w-full h-screen items-center justify-center z-[100]">
+    <div class="absolute inset-0 w-full h-full backdrop-blur-xl bg-[#00000075]"></div>
+    <div class="relative bg-card z-10 rounded-3xl p-4 border-4 border-background-border shadow-lg flex flex-col items-center gap-4 max-w-96">
+      <h2 class="text-4xl font-bold text-center font-creepster text-primary">Video resumen</h2>
+      <video
+        id="video-summary"
+        class="w-full aspect-[3/4] object-cover rounded-lg"
+        src="https://res.cloudinary.com/drd6zj0ws/video/upload/v1729681726/stories/5014b716-b818-4067-a0c9-26b797d984fa/82588503-2d3f-4da3-bf99-3657f4a8a115/video.mp4"
+        controls></video>
+      <a href="/story/config" class="text-muted-foreground text-sm hover:underline">Volver a crear una nueva historia</a>
+    </div>
+  </div>
 </Layout>
 
 <script>
   import { actions } from 'astro:actions'
   import { client } from 'mtmi'
 
-  const TIMER_VOTING = 1
+  const TIMER_VOTING = 30
+  const NUMBER_OF_VOTES = 3
 
   const startVotingButton = document.getElementById('start-voting-button') as HTMLButtonElement
   const votingTimerElement = document.getElementById('voting-timer') as HTMLDivElement
@@ -106,14 +129,17 @@ const getLetterByIndex = (index: number) => String.fromCharCode(65 + index)
   const votingResultsElement = document.getElementById('voting-results') as HTMLDivElement
   const votingResultsValue = document.getElementById('voting-results-value') as HTMLSpanElement
   const continueHistoryButton = document.getElementById('continue-history-button') as HTMLButtonElement
-  const endVotingButton = document.getElementById('end-voting-button') as HTMLButtonElement
+  const endStoryButton = document.getElementById('end-story-button') as HTMLButtonElement
   const storyId = document.getElementById('story-id') as HTMLInputElement
   const generatingStoryModal = document.getElementById('generating-story-modal') as HTMLDivElement
   const sceneActive = document.getElementById('scene-active') as HTMLInputElement
   const storySlug = document.getElementById('story-slug') as HTMLInputElement
+  const generateVideoButton = document.getElementById('generate-video-button') as HTMLButtonElement
+  const videoModal = document.getElementById('video-modal') as HTMLDivElement
+  const videoSummary = document.getElementById('video-summary') as HTMLVideoElement
 
-  let isVoting = false
   let countdown: NodeJS.Timeout | null = null
+  let isVoting = false
   let userVoted: string[] = []
   let winnerIndex: number | null = null
   let countOptions: Record<string, number> = {
@@ -121,6 +147,12 @@ const getLetterByIndex = (index: number) => String.fromCharCode(65 + index)
     b: 0,
     c: 0,
     d: 0,
+  }
+
+  const resetVoting = () => {
+    winnerIndex = null
+    countOptions = { a: 0, b: 0, c: 0, d: 0 }
+    userVoted = []
   }
 
   client.connect({ channels: ['puleador'] })
@@ -179,10 +211,64 @@ const getLetterByIndex = (index: number) => String.fromCharCode(65 + index)
 
   continueHistoryButton?.addEventListener('click', async () => {
     showGeneratingStoryModal()
-    const { data } = await actions.generateContinueStory({ storyId: storyId.value, isLastScene: false, optionSelected: winnerIndex! })
+    const isLastScene = Number(sceneActive.value) >= NUMBER_OF_VOTES
+    const { data } = await actions.generateContinueStory({ storyId: storyId.value, isLastScene, optionSelected: winnerIndex! })
     const dataUpdated = await actions.updateStory({ storyId: storyId.value, data })
     hideGeneratingStoryModal()
     const nextScene = Number(sceneActive.value) + 1
+    resetVoting()
     window.location.href = `/story/chat/${storySlug.value}?scene=${nextScene}`
+  })
+
+  const sleep = (s: number) => new Promise(resolve => setTimeout(resolve, s * 1000))
+
+  endStoryButton?.addEventListener('click', async () => {
+    votingTimerElement.classList.remove('hidden')
+    isVoting = true
+    startCountdown()
+    await sleep(TIMER_VOTING)
+
+    showGeneratingStoryModal()
+
+    const { data } = await actions.generateEndStory({ storyId: storyId.value, optionSelected: winnerIndex! })
+    if (!data) return hideGeneratingStoryModal()
+    const { dataToUpdate, images } = data
+
+    const imagesPrompt = images.map((image: string, index: number) => ({ imageName: `video-${index}`, prompt: image }))
+
+    const imagesPromises: Promise<any>[] = []
+
+    for (const image of imagesPrompt) {
+      imagesPromises.push(actions.generateImage({ prompt: image.prompt, storyId: storyId.value, imageName: image.imageName }))
+    }
+
+    const imagesResponse = await Promise.all(imagesPromises).catch(error => console.error('Error generating images:', error))
+
+    const imageUrls = imagesResponse?.reduce((acc, { data }: any) => {
+      acc[data.imageName] = data.imageUrl
+      return acc
+    }, {})
+
+    const { data: audioData } = await actions.createAudio({ prompt: dataToUpdate.resume, storyId: storyId.value })
+
+    const dataToUpdateWithImages = { ...dataToUpdate, imageUrls: { ...dataToUpdate.imageUrls, ...imageUrls }, audioUrl: audioData?.audioUrl }
+
+    const dataUpdated = await actions.updateStory({ storyId: storyId.value, data: dataToUpdateWithImages })
+
+    resetVoting()
+
+    hideGeneratingStoryModal()
+
+    const nextScene = Number(sceneActive.value) + 1
+    window.location.href = `/story/chat/${storySlug.value}?scene=${nextScene}`
+  })
+
+  generateVideoButton?.addEventListener('click', async () => {
+    showGeneratingStoryModal()
+    const { data } = await actions.generateVideoTranscribed({ storyId: storyId.value })
+    videoSummary.src = data?.responseUpload.secure_url || ''
+    videoModal.classList.remove('hidden')
+    videoModal.classList.add('flex')
+    hideGeneratingStoryModal()
   })
 </script>

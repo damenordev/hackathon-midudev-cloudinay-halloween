@@ -1,8 +1,7 @@
 import { defineAction } from "astro:actions"
 import { z } from "astro:content"
 
-import type { TImageStyle } from "@/types" 
-import { additionalImageCharactersInstructionsPrompt, additionalImageInstructionsPrompt, fetcher, getOutputFormatPrompt, supabase } from "@/utils"
+import { fetcher, getOutputFormatPrompt, supabase } from "@/utils"
 import { API_URL } from "@/constants"
 
 export interface IStoryContinueInput {
@@ -37,13 +36,10 @@ const handleGenerateContinueStory = async ({ storyId, isLastScene, optionSelecte
     - **Location:** ${story.location}
     - **Theme:** ${story.theme}
     - **IMPORTANT: Language of values JSON without promptImages:** ${lang}
-    - Max 3 secondary characters and optionals
     - **Is last scene:** ${isLastScene}
     - Currrent StoryData: ${JSON.stringify(story)}
     - 2 paragraphs
-  
-  ${additionalImageInstructionsPrompt(numberOfImages, story.imageStyle)}
-  ${additionalImageCharactersInstructionsPrompt()}
+    - **IMPORTANT: Always generate 4 options even if it's the last scenario.**
   
   ${getOutputFormatPrompt({
       paragraphs: [
@@ -63,7 +59,6 @@ const handleGenerateContinueStory = async ({ storyId, isLastScene, optionSelecte
   try {
     const storyData = story.data
     const { data } = await fetcher<{ data: IStoryContinueResponse }>(`${API_URL}/ai/generate`, { method: 'POST', data: { prompt } })
-    const { data: { user } } = await supabase.auth.getUser()
 
     const { paragraphs, options, isLastScene } = data
 

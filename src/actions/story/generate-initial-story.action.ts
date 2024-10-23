@@ -8,6 +8,7 @@ import { API_URL } from "@/constants"
 export interface IStoryCharacter {
   name: string
   description: string
+  biography: string
   imagePrompt: string
   isInitialKnown?: boolean
 }
@@ -78,19 +79,22 @@ const handleGenerateInitialStory = async ({ theme, era, location, language, imag
         protagonist: {
           name: `<nameOfProtagonistIn${lang}>`,
           description: `<descriptionOfProtagonistIn${lang}>`,
-          imagePrompt: `<imagePromptOfProtagonistIn${lang}>`,
+          biography: `<biographyOfProtagonistIn${lang}>`,
+          imagePrompt: `<imagePromptOfProtagonist>`,
         },
         antagonist: {
           name: `<nameOfAntagonistIn${lang}>`,
           description: `<descriptionOfAntagonistIn${lang}>`,
-          imagePrompt: `<imagePromptOfAntagonistIn${lang}>`,
+          biography: `<biographyOfAntagonistIn${lang}>`,
+          imagePrompt: `<imagePromptOfAntagonistIn>`,
           isInitialKnown: '<booleanIsInitialKnownInitialStory>',
         },
         secondaryCharacters: [
           {
             name: `<nameOfAntagonistIn${lang}>`,
-            description: `<descriptionOfAntagonistIn${lang}>`,
-            imagePrompt: `<imagePromptOfAntagonistIn${lang}>`,
+            description: `<descriptionOfSecondaryCharacterIn${lang}>`,
+            biography: `<biographyOfSecondaryCharacterIn${lang}>`,
+            imagePrompt: `<imagePromptOfSecondaryCharacter>`,
           }
         ],
       },
@@ -104,14 +108,10 @@ const handleGenerateInitialStory = async ({ theme, era, location, language, imag
     
   try {
     const { data } = await fetcher<{ data: IStoryInitialResponse }>(`${API_URL}/ai/generate`, { method: 'POST', data: { prompt } })
-
     const { data: { user } } = await supabase.auth.getUser()
-    
     const { paragraphs, options, ...rest } = data
     const dataToInsert = { ...rest, scenes: [{paragraphs, options}], theme, era, location, language, imageStyle  }
-
     const slug = `${rest.title.toLowerCase().replace(/ /g, '-')}`
-
     const { data: storyData, error } = await supabase.from('stories').insert({ slug, userId: user?.id, data: dataToInsert }).select('*').single()
     if (error) throw new Error(`Error inserting story: ${error.message}`)
     return storyData

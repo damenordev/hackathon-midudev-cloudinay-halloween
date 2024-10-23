@@ -136,7 +136,12 @@ const image = user?.user?.user_metadata?.avatar_url
     openGeneratingStoryModal()
 
     const { data: initialStory, error: initialStoryError } = await actions.generateInitialStory(formData)
-    console.log({ initialStory, initialStoryError })
+    if (initialStoryError) {
+      generateStoryButton.disabled = false
+      generateStoryButton.textContent = 'Parece que hubo un error, probar de nuevo'
+      closeGeneratingStoryModal()
+      return console.error('Error generating initial story:', initialStoryError)
+    }
     const storyData = initialStory.data
 
     storyTextLoading.classList.add('hidden')
