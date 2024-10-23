@@ -6,7 +6,10 @@ const { slug } = Astro.params as { slug: string }
 const sceneActiveIndex = Number(Astro.url.searchParams.get('scene')) || 1
 
 const { data: dataTable } = await supabase.from('stories').select('*').eq('slug', slug).single()
-const { data: user } = await supabase.auth.getUser()
+const {
+  data: { user },
+} = await supabase.auth.getUser()
+const userMetadata = user?.user_metadata
 
 const story = dataTable?.data
 const sceneActive = story?.scenes[sceneActiveIndex - 1]
@@ -14,9 +17,9 @@ const isLastScene = sceneActive?.isLastScene
 const isEnd = story?.end
 
 const getLetterByIndex = (index: number) => String.fromCharCode(65 + index)
-const userChannel = user?.user?.user_metadata?.nickname.toLowerCase()
+const userChannel = userMetadata?.nickname.toLowerCase()
 
-console.log({ story, dataTable, user: user?.user?.user_metadata, userChannel })
+console.log({ story, dataTable, userMetadata, userChannel })
 ---
 
 <Layout title={story?.title}>

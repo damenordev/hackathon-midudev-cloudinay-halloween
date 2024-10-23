@@ -13,5 +13,6 @@ export const supabase = createClient(import.meta.env.SUPABASE_URL, import.meta.e
     autoRefreshToken: false,
     detectSessionInUrl: false,
     persistSession: true,
+    debug: true,
   },
 })
