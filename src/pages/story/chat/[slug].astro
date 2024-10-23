@@ -158,12 +158,15 @@ console.log({ story, dataTable, user: user?.user?.user_metadata, userChannel })
     userVoted = []
   }
 
-  client.connect({ channels: [channel.value] })
+  const channelValue = channel.value
+
+  client.connect({ channels: [channelValue] })
 
   client.on('message', data => {
     if (!isVoting) return
     const { message, username } = data
     const letter = message.toLowerCase().match(/^!([a-d])$/)?.[1]
+    console.log({ message, username, letter, channelValue })
     if (!letter || userVoted.includes(username)) return
     userVoted.push(username)
     countOptions[letter]++
