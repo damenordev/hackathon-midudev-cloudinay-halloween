@@ -163,6 +163,7 @@ console.log({ story, dataTable, user: user?.user?.user_metadata, userChannel })
   client.connect({ channels: [channelValue] })
 
   client.on('message', data => {
+    console.log({ data, channelValue })
     if (!isVoting) return
     const { message, username } = data
     const letter = message.toLowerCase().match(/^!([a-d])$/)?.[1]
