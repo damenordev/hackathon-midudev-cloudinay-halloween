@@ -1,0 +1,362 @@
+<div class="foreground">
+  <ul class="trees3">
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+  </ul><!-- end ul.trees3 -->
+  <ul class="trees2">
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+  </ul><!-- end ul.trees2 -->
+  <ul class="trees1">
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+  </ul><!-- end ul.trees1 -->
+</div>
+
+<style>
+  /*-- foreground --*/
+  .foreground {
+    background: transparent;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: 0px;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /*-- trees mid --*/
+  ul.trees2 {
+    position: absolute;
+    bottom: 0px;
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    text-align: center;
+    -webkit-filter: blur(3px);
+  }
+  ul.trees2 li {
+    width: 0px;
+    display: block;
+    height: 0px;
+    border-left: 100px solid transparent;
+    border-right: 100px solid transparent;
+    border-bottom: 400px solid #371c3b;
+    border-top: 0px solid transparent;
+    position: absolute;
+    bottom: -50px;
+    animation: wind 10s ease-in-out infinite;
+  }
+  @keyframes wind {
+    50% {
+      transform: rotate(10deg);
+    }
+  }
+
+  ul.trees2 li:nth-child(1) {
+    left: -82px;
+    bottom: 10px;
+  }
+  ul.trees2 li:nth-child(2) {
+    left: -10px;
+  }
+  ul.trees2 li:nth-child(3) {
+    left: 40px;
+    bottom: -80px;
+  }
+  ul.trees2 li:nth-child(4) {
+    left: 90px;
+    bottom: -100px;
+  }
+  ul.trees2 li:nth-child(5) {
+    left: 120px;
+    bottom: -50px;
+  }
+  ul.trees2 li:nth-child(6) {
+    left: 190px;
+    bottom: -120px;
+  }
+  ul.trees2 li:nth-child(7) {
+    left: 270px;
+    bottom: -150px;
+  }
+  ul.trees2 li:nth-child(8) {
+    left: 320px;
+    bottom: -180px;
+  }
+  ul.trees2 li:nth-child(9) {
+    right: -80px;
+  }
+  ul.trees2 li:nth-child(10) {
+    right: -20px;
+    bottom: 40px;
+  }
+  ul.trees2 li:nth-child(11) {
+    right: 44px;
+    bottom: -20px;
+  }
+  ul.trees2 li:nth-child(12) {
+    right: 100px;
+    bottom: -40px;
+  }
+  ul.trees2 li:nth-child(13) {
+    right: 191px;
+    bottom: -110px;
+  }
+  ul.trees2 li:nth-child(14) {
+    right: 220px;
+    bottom: -120px;
+  }
+  ul.trees2 li:nth-child(15) {
+    right: 270px;
+    bottom: -180px;
+  }
+  ul.trees2 li:nth-child(16) {
+    right: 340px;
+    bottom: -210px;
+  }
+
+  /*-- trees front --*/
+  ul.trees1 {
+    position: absolute;
+    bottom: -140px;
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    text-align: center;
+    -webkit-filter: blur(8px);
+  }
+  ul.trees1 li {
+    width: 0px;
+    display: block;
+    height: 0px;
+    border-left: 100px solid transparent;
+    border-right: 100px solid transparent;
+    border-bottom: 400px solid #251329;
+    border-top: 0px solid transparent;
+    position: absolute;
+    bottom: -50px;
+    animation: windys 20s ease-in-out infinite;
+    animation-delay: 3.5s;
+  }
+  @keyframes windys {
+    25% {
+      transform: rotate(-10deg);
+    }
+    50% {
+      transform: rotate(10deg);
+    }
+  }
+
+  ul.trees1 li:nth-child(1) {
+    left: -82px;
+    bottom: 10px;
+  }
+  ul.trees1 li:nth-child(2) {
+    left: -10px;
+  }
+  ul.trees1 li:nth-child(3) {
+    left: 40px;
+    bottom: -80px;
+  }
+  ul.trees1 li:nth-child(4) {
+    left: 90px;
+    bottom: -100px;
+  }
+  ul.trees1 li:nth-child(5) {
+    left: 120px;
+    bottom: -50px;
+  }
+  ul.trees1 li:nth-child(6) {
+    left: 190px;
+    bottom: -120px;
+  }
+  ul.trees1 li:nth-child(7) {
+    left: 270px;
+    bottom: -150px;
+  }
+  ul.trees1 li:nth-child(8) {
+    left: 320px;
+    bottom: -180px;
+  }
+  ul.trees1 li:nth-child(9) {
+    right: -80px;
+  }
+  ul.trees1 li:nth-child(10) {
+    right: 0px;
+    bottom: 30px;
+  }
+  ul.trees1 li:nth-child(11) {
+    right: 94px;
+    bottom: -100px;
+  }
+  ul.trees1 li:nth-child(12) {
+    right: 150px;
+    bottom: -50px;
+  }
+  ul.trees1 li:nth-child(13) {
+    right: 211px;
+    bottom: -190px;
+  }
+  ul.trees1 li:nth-child(14) {
+    right: 240px;
+    bottom: -150px;
+  }
+  ul.trees1 li:nth-child(15) {
+    right: 302px;
+    bottom: -240px;
+  }
+  ul.trees1 li:nth-child(16) {
+    right: 340px;
+    bottom: -210px;
+  }
+
+  /*-- trees back --*/
+  ul.trees3 {
+    position: absolute;
+    bottom: -140px;
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    text-align: center;
+    -webkit-filter: blur(2px);
+    left: 250px;
+  }
+  ul.trees3 li {
+    width: 0px;
+    display: block;
+    height: 0px;
+    border-left: 100px solid transparent;
+    border-right: 100px solid transparent;
+    border-bottom: 400px solid #432247;
+    border-top: 0px solid transparent;
+    position: absolute;
+    bottom: -50px;
+    animation: windy 10s ease-in-out infinite;
+    animation-delay: 1.5s;
+  }
+  @keyframes windy {
+    50% {
+      transform: rotate(10deg);
+    }
+  }
+
+  ul.trees3 li:nth-child(1) {
+    left: -82px;
+    bottom: 10px;
+  }
+  ul.trees3 li:nth-child(2) {
+    left: -19px;
+    bottom: -23px;
+  }
+  ul.trees3 li:nth-child(3) {
+    left: 66px;
+    bottom: -60px;
+  }
+  ul.trees3 li:nth-child(4) {
+    left: 90px;
+    bottom: -100px;
+  }
+  ul.trees3 li:nth-child(5) {
+    left: 120px;
+    bottom: -90px;
+  }
+  ul.trees3 li:nth-child(6) {
+    left: 153px;
+    bottom: -110px;
+  }
+  ul.trees3 li:nth-child(7) {
+    left: 191px;
+    bottom: -139px;
+  }
+  ul.trees3 li:nth-child(8) {
+    left: 253px;
+    bottom: -180px;
+  }
+  ul.trees3 li:nth-child(9) {
+    right: 370px;
+    bottom: 70px;
+  }
+  ul.trees3 li:nth-child(10) {
+    right: 420px;
+    bottom: 50px;
+  }
+  ul.trees3 li:nth-child(11) {
+    right: 504px;
+    bottom: -20px;
+  }
+  ul.trees3 li:nth-child(12) {
+    right: 550px;
+    bottom: -50px;
+  }
+  ul.trees3 li:nth-child(13) {
+    right: 627px;
+    bottom: -100px;
+  }
+  ul.trees3 li:nth-child(14) {
+    right: 670px;
+    bottom: -91px;
+  }
+  ul.trees3 li:nth-child(15) {
+    right: 696px;
+    bottom: -132px;
+  }
+  ul.trees3 li:nth-child(16) {
+    right: 730px;
+    bottom: -150px;
+  }
+
+  @media screen and (min-height: 0px) and (max-height: 600px) {
+    ul.trees1 {
+      bottom: -270px;
+    }
+    ul.trees2 {
+      bottom: -170px;
+    }
+    ul.trees3 {
+      bottom: -300px;
+    }
+  }
+</style>

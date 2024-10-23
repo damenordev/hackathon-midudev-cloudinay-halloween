@@ -1,0 +1,22 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+
+export interface IDropdownOption {
+  value: string
+  label: string
+}
+
+interface Props extends HTMLAttributes<'select'> {
+  label: string
+  options: IDropdownOption[]
+}
+
+const { class: className, label, options, ...rest } = Astro.props
+---
+
+<div class="font-sans">
+  <select class="dropdown-select w-full bg-card border-card-border border-4 rounded-2xl px-4 pt-2 pb-2.5 text-sm" {...rest}>
+    <option disabled selected>{label}</option>
+    {options.map(({ value, label }) => <option class="hover:bg-card-hover" value={value}>{label}</option>)}
+  </select>
+</div>

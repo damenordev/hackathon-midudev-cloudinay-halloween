@@ -1,0 +1,188 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import { supabase } from '@/utils'
+
+// params url
+const { slug } = Astro.params as { slug: string }
+// query url
+const sceneActiveIndex = Number(Astro.url.searchParams.get('scene')) || 0
+
+const { data: dataTable } = await supabase.from('stories').select('*').eq('slug', slug).single()
+const { data: user } = await supabase.auth.getUser()
+
+console.log({ dataTable })
+const story = dataTable?.data
+const sceneActive = story?.scenes[sceneActiveIndex]
+
+// console.log({ sceneActive, sceneActiveIndex, dataTable })
+
+const getLetterByIndex = (index: number) => String.fromCharCode(65 + index)
+---
+
+<Layout title={story?.title}>
+  <main class="p-12 min-h-screen">
+    <input type="hidden" id="scene-active" value={sceneActiveIndex} />
+    <input type="hidden" id="story-id" value={dataTable?.id} />
+    <input type="hidden" id="story-slug" value={slug} />
+
+    <header class="w-fit mx-auto text-center">
+      <h2 class="text-8xl font-bold font-creepster text-primary">{story?.title}</h2>
+      <p class="text-muted-foreground text-sm max-w-screen-xl">{story?.prologue}</p>
+    </header>
+
+    <div class="flex items-start justify-center gap-8 max-w-screen-xl mx-auto mt-16">
+      <aside class="w-64 space-y-4">
+        <div class="bg-card rounded-3xl p-4 space-y-2 border-4 border-card-border text-center">
+          <h3 class="text-4xl font-bold font-creepster text-secondary">Instrucciones</h3>
+          <p class="text-muted-foreground text-sm">Para avanzar en la historia, el chat debe votar por una de las opciones disponibles.</p>
+          <p class="text-muted-foreground text-xs">
+            Comando de voto: <span class="font-mono text-primary">!</span> + <span class="font-mono text-primary">letra</span>
+          </p>
+        </div>
+        <div class="bg-card rounded-3xl p-4 pt-0 space-y-4 border-4 border-card-border">
+          <button id="start-voting-button" class="w-full bg-success text-background font-bold px-4 py-2 rounded-lg mt-4">Iniciar votación</button>
+          <div id="voting-timer" class="hidden text-center">
+            <span>Tiempo restante:</span>
+            <span id="voting-timer-value" class="text-6xl font-bold text-success block"></span>
+          </div>
+          <div id="voting-results" class="hidden text-center">
+            <span>Ganadora:</span>
+            <span id="voting-results-value" class="text-6xl font-bold text-success block"></span>
+            <button id="continue-history-button" class="w-full bg-secondary text-background font-bold px-4 py-2 rounded-lg mt-4">Continuar historia</button>
+          </div>
+          <button id="end-voting-button" class="hidden w-full bg-primary text-background font-bold px-4 py-2 rounded-lg mt-4">Finalizar historia</button>
+        </div>
+      </aside>
+
+      <section class="bg-card rounded-3xl p-12 flex-1 space-y-8 border-8 border-card-border">
+        <div class="space-y-4">
+          {sceneActive?.paragraphs.map((paragraph: string) => <p class="text-muted-foreground text-center text-lg">{paragraph}</p>)}
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          {
+            sceneActive?.options.map((option: string, index: number) => (
+              <div class="bg-popover text-white px-4 py-2 rounded-lg flex items-center gap-4">
+                <span class="text-4xl font-bold text-success">{getLetterByIndex(index)}</span>
+                <span>{option}</span>
+              </div>
+            ))
+          }
+        </div>
+      </section>
+
+      <aside class="w-64">
+        <img class="w-full aspect-[3/4] object-cover rounded-lg" src={story?.imageUrls.cover} alt={story?.title} />
+      </aside>
+    </div>
+  </main>
+  <div id="generating-story-modal" class="hidden fixed top-0 left-0 w-full h-screen items-center justify-center z-[100]">
+    <div class="absolute inset-0 w-full h-full backdrop-blur-xl bg-[#00000075]"></div>
+    <div class="relative bg-card z-10 rounded-3xl p-12 border-4 border-background-border shadow-lg flex flex-col items-center gap-4">
+      <h2 class="text-6xl font-bold text-center font-creepster text-primary">Continuando</h2>
+      <p class="text-sm text-muted-foreground text-center max-w-[70%] text-balance mx-auto">
+        Espera un momento mientras generamos la continuación de tu historia...
+      </p>
+      <svg id="story-text-loading" class="size-10 animate-spin mt-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="currentColor">
+        <path
+          d="M12 22C6.477 22 2 17.523 2 12H0C0 17.523 4.477 22 10 22V22Z"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"></path>
+      </svg>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  import { actions } from 'astro:actions'
+  import { client } from 'mtmi'
+
+  const TIMER_VOTING = 1
+
+  const startVotingButton = document.getElementById('start-voting-button') as HTMLButtonElement
+  const votingTimerElement = document.getElementById('voting-timer') as HTMLDivElement
+  const votingTimerValue = document.getElementById('voting-timer-value') as HTMLSpanElement
+  const votingResultsElement = document.getElementById('voting-results') as HTMLDivElement
+  const votingResultsValue = document.getElementById('voting-results-value') as HTMLSpanElement
+  const continueHistoryButton = document.getElementById('continue-history-button') as HTMLButtonElement
+  const endVotingButton = document.getElementById('end-voting-button') as HTMLButtonElement
+  const storyId = document.getElementById('story-id') as HTMLInputElement
+  const generatingStoryModal = document.getElementById('generating-story-modal') as HTMLDivElement
+  const sceneActive = document.getElementById('scene-active') as HTMLInputElement
+  const storySlug = document.getElementById('story-slug') as HTMLInputElement
+
+  let isVoting = false
+  let countdown: NodeJS.Timeout | null = null
+  let userVoted: string[] = []
+  let winnerIndex: number | null = null
+  let countOptions: Record<string, number> = {
+    a: 0,
+    b: 0,
+    c: 0,
+    d: 0,
+  }
+
+  client.connect({ channels: ['puleador'] })
+
+  client.on('message', data => {
+    if (!isVoting) return
+    const { message, username } = data
+    const letter = message.toLowerCase().match(/^!([a-d])$/)?.[1]
+    if (!letter || userVoted.includes(username)) return
+    userVoted.push(username)
+    countOptions[letter]++
+  })
+
+  const showGeneratingStoryModal = () => {
+    generatingStoryModal.classList.remove('hidden')
+    generatingStoryModal.classList.add('flex')
+  }
+
+  const hideGeneratingStoryModal = () => {
+    generatingStoryModal.classList.add('hidden')
+    generatingStoryModal.classList.remove('flex')
+  }
+
+  const startCountdown = () => {
+    let timeLeft = TIMER_VOTING
+    updateTimerDisplay(timeLeft)
+
+    countdown = setInterval(() => {
+      timeLeft--
+      updateTimerDisplay(timeLeft)
+
+      if (timeLeft <= 0) endVoting()
+    }, 1000)
+  }
+
+  const updateTimerDisplay = (time: number) => {
+    votingTimerValue.textContent = time.toString()
+  }
+
+  const endVoting = async () => {
+    clearInterval(countdown!)
+    isVoting = false
+    const winner = Object.keys(countOptions).reduce((a, b) => (countOptions[a] > countOptions[b] ? a : b))
+    winnerIndex = winner.charCodeAt(0) - 'a'.charCodeAt(0)
+    votingResultsValue.textContent = winner.toUpperCase()
+    votingResultsElement.classList.remove('hidden')
+    votingTimerElement.classList.add('hidden')
+  }
+
+  startVotingButton?.addEventListener('click', () => {
+    startVotingButton.classList.add('hidden')
+    votingTimerElement.classList.remove('hidden')
+    isVoting = true
+    startCountdown()
+  })
+
+  continueHistoryButton?.addEventListener('click', async () => {
+    showGeneratingStoryModal()
+    const { data } = await actions.generateContinueStory({ storyId: storyId.value, isLastScene: false, optionSelected: winnerIndex! })
+    const dataUpdated = await actions.updateStory({ storyId: storyId.value, data })
+    hideGeneratingStoryModal()
+    const nextScene = Number(sceneActive.value) + 1
+    window.location.href = `/story/chat/${storySlug.value}?scene=${nextScene}`
+  })
+</script>

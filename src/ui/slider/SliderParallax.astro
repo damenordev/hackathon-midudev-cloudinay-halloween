@@ -1,0 +1,199 @@
+---
+interface Props {
+  swiperItems: {
+    title: string
+    description: string
+    image: string
+  }[]
+}
+
+const { swiperItems } = Astro.props
+---
+
+<div class="swiper relative w-full h-fit cursor-grab bg-background border-4 border-background-border rounded-3xl overflow-hidden">
+  <div class="swiper-wrapper">
+    {
+      swiperItems.map((item, index) => (
+        <div class="swiper-slide p-8 pt-12">
+          <div class="title relative text-3xl font-semibold text-center mb-5" data-content={item.title}>
+            {item.title}
+          </div>
+          <div
+            class="image relative aspect-video z-10 overflow-hidden rounded-3xl"
+            data-swiper-parallax="300"
+            data-swiper-parallax-opacity="0"
+            data-swiper-parallax-x="110%"
+            data-swiper-parallax-y="100%"
+            data-swiper-parallax-scale="0.6"
+          >
+            <img class="w-full h-full object-cover absolute top-0 left-0 scale-120" src={item.image} alt="" />
+            <img class="w-full h-full object-cover " src={item.image} alt="" />
+          </div>
+        </div>
+      ))
+    }
+  </div>
+  <div class="swiper-pagination h-fit z-50"></div>
+</div>
+
+<script>
+  import Swiper from 'swiper'
+  import 'swiper/css'
+  import 'swiper/css/pagination'
+  import 'swiper/css/parallax'
+  import 'swiper/css/navigation'
+  import 'swiper/css/effect-fade'
+  import { Pagination, Navigation, EffectFade, Autoplay, Parallax } from 'swiper/modules'
+
+  const handleOnLoad = () => {
+    const swiper = new Swiper('.swiper', {
+      speed: 700,
+      enabled: true,
+      parallax: true,
+      loop: true,
+      pagination: { el: '.swiper-pagination' },
+      modules: [Pagination, Navigation, EffectFade, Autoplay, Parallax],
+    })
+  }
+
+  document.addEventListener('astro:page-load', handleOnLoad)
+</script>
+
+<style>
+  :root {
+    --swiper-pagination-color: #fff;
+    --swiper-pagination-bullet-inactive-color: #fff;
+    --swiper-pagination-bullet-inactive-opacity: 0.2;
+    --swiper-pagination-top: 0.5rem;
+  }
+
+  .swiper-slide .title {
+    position: relative;
+    font-size: 2rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 1.3rem;
+  }
+
+  .swiper-slide .title:before,
+  .swiper-slide .title:after {
+    content: attr(data-content);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  .swiper-slide .title:before {
+    color: #00ffff;
+    z-index: -1;
+    animation: glitchy 0.8s ease 0.8s infinite;
+  }
+
+  .swiper-slide .title:after {
+    color: #ff00ff;
+    z-index: -2;
+    animation: glitchy 0.8s ease infinite reverse;
+  }
+
+  @keyframes glitchy {
+    0% {
+      transform: translate(-2px, 2px);
+    }
+    25% {
+      transform: translate(-2px, -2px);
+    }
+    50% {
+      transform: translate(2px, 2px);
+    }
+    75% {
+      transform: translate(2px, -2px);
+    }
+    100% {
+      transform: translate(-2px, 2px);
+    }
+  }
+
+  @keyframes animate {
+    0% {
+      object-position: 0 0;
+      filter: hue-rotate(0deg);
+    }
+    10% {
+      object-position: 10px 0;
+    }
+    20% {
+      object-position: -5px 0;
+    }
+    30% {
+      object-position: 15px 0;
+    }
+    40% {
+      object-position: 5px 0;
+    }
+    50% {
+      object-position: -25px 0;
+    }
+    60% {
+      object-position: -50px 0;
+    }
+    70% {
+      object-position: 0 -20px;
+    }
+    80% {
+      object-position: -60px -20px;
+    }
+    100% {
+      object-position: 0 0;
+      filter: hue-rotate(360deg);
+    }
+  }
+
+  /* MEDIA QUERIES */
+
+  @media (max-width: 1150px) {
+    .swiper {
+      width: 90%;
+      height: 60%;
+    }
+
+    .swiper-slide .title {
+      font-size: 2rem;
+      margin-bottom: 0.1rem;
+    }
+
+    .swiper-slide .text > p {
+      font-size: 1rem;
+    }
+  }
+
+  @media (max-width: 990px) {
+    .swiper {
+      width: 90%;
+      height: 60%;
+    }
+
+    .swiper-slide .title {
+      font-size: 1.5rem;
+      margin-bottom: 0.1rem;
+    }
+
+    .swiper-slide .text > p {
+      font-size: 0.9rem;
+    }
+  }
+
+  @media (max-width: 880px) {
+    .swiper {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 670px) {
+    .swiper-slide {
+      grid-template-columns: repeat(1, 1fr);
+      padding: 30px 30px;
+    }
+  }
+</style>

@@ -1,0 +1,38 @@
+<div class="moon drop-shadow-[0_0px_80px_rgba(255,255,180,0.30)] scale-50 translate-y-40">
+  <div class="absolute h-full w-full rounded-full bg-[radial-gradient(circle_at_66%_75%,hsl(230deg,100%,80%),hsl(230deg,100%,100%))]"></div>
+</div>
+
+<style>
+  .moon {
+    height: 45vw;
+    width: 45vw;
+    border-radius: 50%;
+    div {
+      background: url(https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Moon_nearside_LRO_5000_%282%29.png/1024px-Moon_nearside_LRO_5000_%282%29.png);
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+  }
+</style>
+
+<script>
+  import gsap from 'gsap'
+  import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+  gsap.registerPlugin(ScrollTrigger)
+
+  const handleOnLoad = () => {
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        start: 'top top',
+        end: '+=200%s',
+        scrub: true,
+      },
+    })
+    // tl.from('.moon', { scale: 0.75, opacity: 1, y: 150 }, '>')
+    tl.to('.moon', { scale: 0.75, opacity: 0, y: -450 }, '>')
+  }
+
+  document.addEventListener('astro:page-load', handleOnLoad)
+</script>

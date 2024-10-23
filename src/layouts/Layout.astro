@@ -1,0 +1,26 @@
+---
+import { APP_TITLE, APP_DESCRIPTION, APP_IMAGE } from '@/constants'
+
+import LayoutHead from './LayoutHead.astro'
+
+import './styles.css'
+
+interface Props {
+  title: string
+  description?: string
+  image?: string
+}
+
+const { title = APP_TITLE, description = APP_DESCRIPTION, image = APP_IMAGE } = Astro.props
+---
+
+<html lang="en">
+  <LayoutHead title={title} description={description} image={image} />
+  <body class="bg-background text-background-foreground min-h-screen overflow-x-hidden">
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Nunito:wght@200;300;400;500;600;700;800;900&display=swap');
+</style>

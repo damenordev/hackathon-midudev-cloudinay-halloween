@@ -1,0 +1,262 @@
+<div class="absolute -top-0 -right-0">
+<!-- <div class="absolute -top-32 -right-10"> -->
+  <img src="https://i.hizliresim.com/Llrarb.png" alt="" />
+  <div class="spider-wrap">
+    <div class="cobweb"></div>
+    <div class="spider">
+      <div class="body">
+        <div class="head">
+          <div class="eyes">
+            <div class="eye left"></div>
+            <div class="eye right"></div>
+          </div>
+        </div>
+        <div class="legs left">
+          <div class="arm arm-1"></div>
+          <div class="arm arm-2"></div>
+          <div class="arm arm-3"></div>
+          <div class="arm arm-4"></div>
+        </div>
+        <div class="legs right">
+          <div class="arm arm-5"></div>
+          <div class="arm arm-6"></div>
+          <div class="arm arm-7"></div>
+          <div class="arm arm-8"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .spider-wrap {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(50%, 0);
+    height: 100%;
+  }
+
+  .spider {
+    animation: moveSpider 8s infinite;
+    height: 100%;
+    margin: 0 auto;
+    position: relative;
+    top: -50%;
+    transition: 1s ease-in-out;
+    scale: 0.5;
+  }
+
+  .cobweb {
+    animation: moveCobweb 16s infinite;
+    background: #333;
+    left: 50%;
+    position: relative;
+    top: 0;
+    transform: translate(-50%, 0);
+    width: 2px;
+  }
+
+  @keyframes moveCobweb {
+    0% {
+      height: 30%;
+    }
+    25% {
+      height: 80%;
+    }
+    50% {
+      height: 45%;
+    }
+    75% {
+      height: 60%;
+    }
+    100% {
+      height: 30%;
+    }
+  }
+
+  .body {
+    background: #2c2c2c;
+    border-radius: 50% 50% 45% 45%;
+    height: 130px;
+    margin: 0 auto;
+    position: relative;
+    top: 70px;
+    width: 100px;
+  }
+
+  .head {
+    background: #282828;
+    border-radius: 50%;
+    bottom: -30px;
+    height: 70px;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, 0);
+    width: 70px;
+    z-index: 1;
+  }
+
+  .eyes {
+    left: 50%;
+    position: absolute;
+    top: 16px;
+    transform: translate(-50%, 0);
+  }
+
+  .eye {
+    background: #fff;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+  }
+
+  .eye:after {
+    background: #ff6f17;
+    border-radius: 50%;
+    content: '';
+    display: block;
+    height: 8px;
+    position: absolute;
+    width: 8px;
+  }
+
+  .eye.left {
+    height: 30px;
+    width: 30px;
+    left: -26px;
+  }
+
+  .eye.right {
+    height: 22px;
+    width: 22px;
+    right: -26px;
+    top: 4px;
+  }
+
+  .eye.left:after {
+    right: 5px;
+    top: 9px;
+  }
+
+  .eye.right:after {
+    left: 3px;
+    top: 5px;
+  }
+
+  .legs {
+    position: absolute;
+    top: 10px;
+    width: 10px;
+    height: 10px;
+  }
+
+  .legs.left {
+    left: 0px;
+  }
+
+  .legs.right {
+    right: 0px;
+    transform: scaleX(-1);
+  }
+
+  .arm {
+    position: absolute;
+  }
+
+  .arm-1,
+  .arm-5 {
+    border-bottom: 14px solid #2c2c2c;
+    border-radius: 0 0 50px 50px;
+    height: 80px;
+    left: -28px;
+    top: -78px;
+    transform: rotate(30deg);
+    width: 90px;
+  }
+
+  .arm-2,
+  .arm-6 {
+    height: 130px;
+    left: -120px;
+    top: -60px;
+    width: 120px;
+  }
+
+  .arm-2:before,
+  .arm-2:after,
+  .arm-3:before,
+  .arm-3:after,
+  .arm-6:before,
+  .arm-6:after,
+  .arm-7:before,
+  .arm-7:after {
+    content: '';
+    height: 0;
+    position: absolute;
+    width: 0;
+  }
+
+  .arm-2:before,
+  .arm-6:before {
+    border-left: 11px solid transparent;
+    border-right: 11px solid transparent;
+    border-bottom: 90px solid #2c2c2c;
+    left: 46px;
+    transform: rotate(-24deg);
+    top: 1px;
+    border-radius: 0px 0px 0px 11px;
+  }
+
+  .arm-2:after,
+  .arm-6:after {
+    background: #2c2c2c;
+    border-radius: 0 50% 50% 0;
+    bottom: 29px;
+    height: 17px;
+    transform: rotate(18deg);
+    right: -29px;
+    width: 80px;
+  }
+
+  .arm-3,
+  .arm-7 {
+    height: 130px;
+    left: -120px;
+    top: 52px;
+    width: 120px;
+  }
+
+  .arm-3:before,
+  .arm-7:before {
+    border-left: 11px solid transparent;
+    border-right: 11px solid transparent;
+    border-bottom: 90px solid #2c2c2c;
+    left: 44px;
+    transform: rotate(194deg);
+    top: 4px;
+    border-radius: 0px 0px 0px 11px;
+  }
+
+  .arm-3:after,
+  .arm-7:after {
+    background: #2c2c2c;
+    border-radius: 0 50% 50% 0;
+    top: 0px;
+    height: 17px;
+    transform: rotate(-4deg);
+    right: -18px;
+    width: 80px;
+  }
+
+  .arm-4,
+  .arm-8 {
+    border-bottom: 14px solid #2c2c2c;
+    border-radius: 0 0 50px 50px;
+    height: 80px;
+    left: -30px;
+    top: 80px;
+    transform: rotate(145deg);
+    width: 90px;
+  }
+</style>

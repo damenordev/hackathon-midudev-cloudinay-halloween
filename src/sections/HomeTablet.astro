@@ -1,0 +1,126 @@
+---
+import Cam from '@/components/shared/Cam.astro'
+import SignInForm from '@/components/SignInForm.astro'
+---
+
+<section id="hero" class="sticky top-12 pb-60 px-4 z-40 min-h-screen">
+  <div
+    id="hero-parallax"
+    class="parallax relative w-full max-w-screen-xl aspect-video mx-auto overflow-hidden border-[20px] border-background-border rounded-[40px] bg-background"
+  >
+    <div class="absolute top-0 left-0 w-full h-[80%] bg-gradient-to-b from-background via-card to-secondary/50"></div>
+    <img class="absolute bottom-0 left-0 w-full pointer-events-none" src="/images/hero_house.png" id="hero-house" alt="halloween house" />
+    <img class="absolute bottom-0 left-0 w-full pointer-events-none" src="/images/hero_left_side.png" id="hero-leftside" alt="halloween left side" />
+    <img class="absolute bottom-0 left-0 w-full pointer-events-none" src="/images/hero_right_side.png" id="hero-rightside" alt="halloween right side" />
+    <img class="absolute bottom-0 left-0 w-full pointer-events-none" src="/images/hero_floor.png" id="hero-bottom" alt="halloween floor" />
+    <img class="absolute bottom-0 left-0 w-full pointer-events-none" src="/images/hero_left_pumpkin.png" id="hero-leftpumpkin" alt="halloween left pumpkin" />
+    <img
+      class="absolute bottom-0 left-0 w-full pointer-events-none"
+      src="/images/hero_right_pumpkin.png"
+      id="hero-rightpumpkin"
+      alt="halloween right pumpkin"
+    />
+
+    <div class="absolute top-0 left-0 w-full h-full">
+      <Cam />
+    </div>
+
+    <div class="w-5 h-10 bg-neutral-800 rounded-full absolute top-1/2 left-4 transform -translate-y-1/2 flex flex-col items-center justify-between py-1">
+      <div class="size-2 bg-neutral-200 rounded-full"></div>
+      <div class="size-2 bg-neutral-700 rounded-full"></div>
+    </div>
+
+    <div
+      id="hero-parallax-menu"
+      class="-translate-y-full opacity-0 absolute top-0 left-0 w-full h-full bg-neutral-900/50 backdrop-blur-3xl rounded-b-2xl p-4 flex flex-col gap-4"
+    >
+      <div class="relative flex items-center justify-between gap-2 bg-neutral-800/80 backdrop-blur-xl rounded-3xl p-4">
+        <div class="size-10 bg-neutral-800 rounded-full flex items-center justify-center text-xl">🎃</div>
+        <div class="flex flex-col flex-1">
+          <h2 class="text-sm font-bold text-neutral-50">Scary Movies Shorts</h2>
+          <p class="text-xs text-neutral-400 text-balance">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.</p>
+        </div>
+        <div>
+          <a class="text-xs font-bold text-neutral-950 bg-emerald-400 rounded-full px-3 py-1.5" href="/config">Ver historias</a>
+        </div>
+      </div>
+      <div class="relative flex-1 w-full p-8 space-y-8">
+        <h2 class="text-6xl font-bold text-secondary">Crea historias terroríficas con Twitch</h2>
+        <p class="text-4xl text-neutral-100 text-balance">
+          Inicia sesión con tu canal y juega con tu comunidad a crear historias increibles con la que pasaras un verdadero miedo
+        </p>
+        <SignInForm />
+        <div class="w-full p-8 flex items-center justify-center gap-8">
+          <div class="w-96 h-96 bg-card rounded-3xl overflow-hidden flex items-center justify-center shadow-[0_-16px_20px_rgba(0,0,0,0.2)]">
+            <video
+              class="w-full h-full object-cover"
+              src="https://videos.pexels.com/video-files/14066876/14066876-hd_806_1440_30fps.mp4"
+              autoplay
+              muted
+              loop
+              playsinline></video>
+          </div>
+          <div class="w-96 h-96 bg-card rounded-3xl overflow-hidden flex items-center justify-center shadow-[0_-16px_20px_rgba(0,0,0,0.2)]">
+            <img
+              class="w-full h-full object-cover"
+              src="https://images.pexels.com/photos/5427540/pexels-photo-5427540.jpeg?auto=compress&cs=tinysrgb&w=600"
+              alt=""
+            />
+          </div>
+          <div class="w-96 h-96 bg-card rounded-3xl overflow-hidden flex items-center justify-center shadow-[0_-16px_20px_rgba(0,0,0,0.2)]">
+            <video
+              class="w-full h-full object-cover"
+              src="https://videos.pexels.com/video-files/5435289/5435289-sd_506_960_25fps.mp4"
+              autoplay
+              muted
+              loop
+              playsinline></video>
+          </div>
+          <div class="w-96 h-96 bg-card rounded-3xl overflow-hidden flex items-center justify-center shadow-[0_-16px_20px_rgba(0,0,0,0.2)]">
+            <img
+              class="w-full h-full object-cover"
+              src="https://images.pexels.com/photos/28302293/pexels-photo-28302293.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=279.825&fit=crop&h=453.05"
+              alt=""
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import gsap from 'gsap'
+  import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+  const handleOnLoad = () => {
+    gsap.registerPlugin(ScrollTrigger)
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '#hero',
+        start: 'top top',
+        end: '+=150%',
+        pin: true,
+        scrub: true,
+      },
+    })
+
+    tl.from('#hero-parallax', { scale: 0.85 }, '<')
+      .fromTo('#hero-leftside', { x: -100 }, { x: 0, y: 40 }, '<')
+      .fromTo('#hero-rightside', { x: 100 }, { x: 0, y: 40 }, '<')
+      .to('#hero-house', { scale: 1.5, y: 0 }, '<')
+      .to('#hero-leftpumpkin', { x: -50 }, '<')
+      .to('#hero-rightpumpkin', { x: 50 }, '<')
+      .to('#hero-bottom', { y: 50 }, '<')
+      .to('#hero-parallax-menu', { opacity: 1, y: 0 }, '>')
+
+    // menu animation childrens
+    gsap.utils.toArray('#hero-parallax-menu > *').forEach((elem, i) => {
+      tl.from(elem!, { opacity: 0, y: i === 0 ? -200 : -40, zIndex: -i * 100 }, '>')
+    })
+
+    tl.to('#hero-parallax-menu', { backgroundColor: 'rgba(0,0,0,0.5)' }, '<')
+  }
+
+  document.addEventListener('astro:page-load', handleOnLoad)
+</script>

@@ -1,0 +1,47 @@
+---
+import { Dropdown } from '@/ui'
+import {
+  IMAGE_STYLES,
+  IMAGE_STYLES_OPTIONS,
+  STORY_CONFIG_ERA_OPTIONS,
+  STORY_CONFIG_LANGUAGE_OPTIONS,
+  STORY_CONFIG_LOCATION_OPTIONS,
+  STORY_CONFIG_THEME_OPTIONS,
+} from '@/constants'
+---
+
+<form id="story-config-form" class="w-full relative pt-4 px-8">
+  <h2 class="text-8xl font-bold font-creepster text-center mb-8 text-primary">Configura tu historia</h2>
+  <div class="grid grid-cols-4 gap-8 max-w-5xl mx-auto z-20">
+    <Dropdown id="monster-select" label="Selecciona la tematica" name="theme" options={STORY_CONFIG_THEME_OPTIONS} />
+    <Dropdown label="Selecciona la epoca" name="era" options={STORY_CONFIG_ERA_OPTIONS} />
+    <Dropdown label="Selecciona la localización" name="location" options={STORY_CONFIG_LOCATION_OPTIONS} />
+    <Dropdown label="Selecciona el idioma" name="language" options={STORY_CONFIG_LANGUAGE_OPTIONS} />
+  </div>
+
+  <div class="w-fit mx-auto">
+    <h3 class="text-3xl text-center font-bold mt-12">Selecciona el estilo de las imagenes</h3>
+    <div class="w-fit mx-auto py-4 grid grid-cols-4 gap-4 max-w-screen-xl">
+      {
+        IMAGE_STYLES_OPTIONS.map(style => (
+          <div
+            class="story-image-style-option w-full bg-card border-8 border-background-border rounded-3xl overflow-hidden flex items-center justify-center opacity-60 transition-all cursor-pointer group grayscale hover:grayscale-0 hover:opacity-100 hover:border-primary"
+            data-value={style}
+          >
+            <img class="inset-0 object-cover group-hover:scale-110 group-hover:rotate-6 transition-all" src={`/images/styles/${style}.png`} alt="" />
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="w-full flex justify-center py-8">
+    <button
+      id="generate-story-button"
+      class="bg-emerald-300 text-background border-4 border-emerald-400 px-4 pb-1 pt-0.5 rounded-2xl font-bold text-2xl transition-all active:scale-95 hover:bg-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-emerald-300 disabled:pointer-events-none"
+      type="submit"
+    >
+      Generar historia
+    </button>
+  </div>
+</form>

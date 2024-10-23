@@ -1,0 +1,230 @@
+---
+import Witch from '@/components/shared/Witch.astro'
+import PumpkinAnimated from '@/components/shared/PumpkinAnimated.astro'
+import TitleAnimated from '@/components/TitleAnimated.astro'
+import Moon from '@/components/shared/Moon.astro'
+import SignInForm from '@/components/SignInForm.astro'
+
+import HomeHeroUfoWrap from './HomeHeroUfoWrap.astro'
+import HomeHeroBackground from './HomeHeroBackground.astro'
+import HomeHeroForeground from './HomeHeroForeground.astro'
+import HomeHeroCamera from './HomeHeroCamera.astro'
+---
+
+<div class="scene overflow-hidden sticky top-0 left-0 w-full h-screen shadow-none">
+  <div class="scene-focus w-full">
+    <HomeHeroBackground />
+    <div class="absolute bottom-10 left-[50%] -translate-x-1/2 z-10">
+      <Moon />
+    </div>
+    <HomeHeroUfoWrap />
+    <div class="w-full z-20">
+      <div class="absolute top-0 left-0 w-full h-[80%] bg-gradient-to-b from-background via-card to-secondary/50"></div>
+      <img class="absolute bottom-0 left-0 w-full pointer-events-none z-20" src="/images/hero_left_side.png" id="hero-leftside" alt="halloween left side" />
+      <img class="absolute bottom-0 left-0 w-full pointer-events-none z-20" src="/images/hero_right_side.png" id="hero-rightside" alt="halloween right side" />
+      <img class="absolute bottom-0 left-0 w-full pointer-events-none z-20" src="/images/hero_floor.png" id="hero-bottom" alt="halloween floor" />
+      <img
+        class="absolute bottom-0 left-0 w-full pointer-events-none z-20"
+        src="/images/hero_left_pumpkin.png"
+        id="hero-leftpumpkin"
+        alt="halloween left pumpkin"
+      />
+      <img
+        class="absolute bottom-0 left-0 w-full pointer-events-none z-20"
+        src="/images/hero_right_pumpkin.png"
+        id="hero-rightpumpkin"
+        alt="halloween right pumpkin"
+      />
+
+      <!-- <div class="absolute top-0 left-0 w-full h-full">
+        <Cam />
+        </div> -->
+
+      <div class="w-5 h-10 bg-neutral-800 rounded-full absolute top-1/2 left-4 transform -translate-y-1/2 flex flex-col items-center justify-between py-1">
+        <div class="size-2 bg-neutral-200 rounded-full"></div>
+        <div class="size-2 bg-neutral-700 rounded-full"></div>
+      </div>
+    </div>
+    <HomeHeroCamera />
+    <HomeHeroForeground />
+    <div class="w-full absolute top-[50%] right-0 -translate-y-[60%] z-30">
+      <TitleAnimated />
+    </div>
+    <div class="witch">
+      <Witch class="size-40 fill-background-foreground/10" />
+    </div>
+  </div>
+
+  <div class="absolute bottom-0 left-0 w-full flex justify-center items-center z-30">
+    <div class="opacity-50 blur-sm ml-1">
+      <PumpkinAnimated />
+    </div>
+  </div>
+  <div
+    id="hero-parallax-menu"
+    class="-translate-y-[200%] opacity-100 absolute top-4 left-[15px] w-[calc(100%-30px)] h-[calc(100%-30px)] bg-neutral-900/50 backdrop-blur-xl rounded-b-2xl p-12 flex flex-col gap-4 z-10"
+  >
+    <div class="relative flex items-center justify-between gap-2 bg-neutral-800/80 backdrop-blur-xl rounded-3xl p-4 z-50">
+      <div class="size-10 bg-neutral-800 rounded-full flex items-center justify-center text-xl">🎃</div>
+      <div class="flex flex-col flex-1">
+        <h2 class="text-lg font-bold text-neutral-50">Scary Movies Shorts</h2>
+        <p class="text-md text-neutral-400 text-balance">Entra y visualiza las historias que han creado tus influencers favoritos.</p>
+      </div>
+    </div>
+    <div class="relative flex-1 w-full px-12 py-24">
+      <h2 class="text-6xl font-bold text-purple-400">Inicia sesión con tu canal de Twitch</h2>
+      <p class="text-4xl text-neutral-100 text-balance mt-4 mb-16">
+        Entra y empieza a crear historias increibles con tu comunidad con la que pasaras un verdadero miedo, no esperes más y
+        <a class="text-emerald-400 font-bold hover:underline z-30" href="/signin">¡Empezar ahora!</a>
+      </p>
+      <div class="w-full h-1/2 p-8 flex items-center justify-center gap-8 translate-y-5">
+        <div
+          class="w-full h-full bg-card rounded-3xl overflow-hidden flex items-center justify-center shadow-[0_-16px_20px_rgba(0,0,0,0.2)] object-cover"
+          style={{ background: 'url(https://images.pexels.com/photos/5427540/pexels-photo-5427540.jpeg?auto=compress&cs=tinysrgb&w=600)' }}
+        >
+        </div>
+        <div class="w-full h-full bg-card rounded-3xl overflow-hidden flex items-center justify-center shadow-[0_-16px_20px_rgba(0,0,0,0.2)]">
+          <video
+            class="w-full h-full object-cover"
+            src="https://videos.pexels.com/video-files/5435289/5435289-sd_506_960_25fps.mp4"
+            autoplay
+            muted
+            loop
+            playsinline></video>
+        </div>
+        <div
+          class="w-full h-full bg-card rounded-3xl overflow-hidden flex items-center justify-center shadow-[0_-16px_20px_rgba(0,0,0,0.2)] object-cover"
+          style={{
+            background: 'url(https://images.pexels.com/photos/28302293/pexels-photo-28302293.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=1024)',
+          }}
+        >
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="scene-border" class="absolute inset-0 border-[16px] border-transparent w-[calc(100%-16px)] h-full z-40 rounded-3xl"></div>
+  <div class="absolute bottom-10 left-[50%] -translate-y-0 -translate-x-1/2 z-40">
+    <svg class="size-8 animate-bounce" viewBox="0 0 24 24" stroke-width="2" fill="none" xmlns="http://www.w3.org/2000/svg" color="currentColor">
+      <path d="M6 13L12 19L18 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+      <path d="M6 5L12 11L18 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> </path>
+    </svg>
+  </div>
+</div>
+<div id="hero-start-button" class="fixed top-[65vh] left-[50%] -translate-x-1/2 z-40">
+  <SignInForm href="/signin">
+    <div class="text-xl font-bold bg-purple-800 border-8 border-purple-900 rounded-full px-8 py-2.5 pb-3 transition-all active:scale-95 hover:bg-purple-900">
+      ¡Empieza tu historia!
+    </div>
+  </SignInForm>
+</div>
+
+<style>
+  .scene {
+    width: 100vw;
+    height: 100vh;
+  }
+  .scene-focus {
+    width: 100vw;
+    height: 100vh;
+    animation: focus 10s ease-in-out infinite;
+    /* -webkit-filter: blur(5px); */
+    z-index: 1;
+    position: absolute;
+    background-color: transparent;
+  }
+  @keyframes focus {
+    0% {
+      -webkit-filter: blur(0px);
+    }
+    30% {
+      -webkit-filter: blur(0px);
+    }
+    50% {
+      -webkit-filter: blur(4px);
+    }
+    60% {
+      -webkit-filter: blur(0px);
+    }
+    80% {
+      -webkit-filter: blur(0px);
+    }
+    90% {
+      -webkit-filter: blur(6px);
+    }
+    100% {
+      -webkit-filter: blur(0px);
+    }
+  }
+
+  .witch {
+    position: absolute;
+    top: 100px;
+    left: -30vw;
+    animation: witch-is-flying 8s linear infinite;
+  }
+  @keyframes witch-is-flying {
+    0%,
+    40% {
+      transform: translate(0, 0);
+    }
+    100% {
+      transform: translate(145vw, -20vh);
+    }
+  }
+</style>
+
+<script>
+  import gsap from 'gsap'
+  import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+  const handleOnLoad = () => {
+    gsap.registerPlugin(ScrollTrigger)
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '.scene',
+        start: 'top top',
+        end: '+=250%',
+        pin: true,
+        scrub: true,
+      },
+    })
+
+    tl.to('.scene', { scale: 0.8, borderRadius: '24px', boxShadow: '0 12px 40px rgba(255, 255, 255, 0.05)' }, '<')
+      .to('#scene-border', { borderColor: '#282828', width: '100%' }, '<')
+      .fromTo('#hero-leftside', { x: -100 }, { x: 0, y: 40 }, '<')
+      .fromTo('#hero-rightside', { x: 100 }, { x: 0, y: 40 }, '<')
+      .to('#hero-house', { scale: 1.5, y: 0 }, '<')
+      .to('#hero-leftpumpkin', { x: -50 }, '<')
+      .to('#hero-rightpumpkin', { x: 50 }, '<')
+      .to('#hero-bottom', { y: 50 }, '<')
+      .to('#hero-parallax-menu', { backgroundColor: 'rgba(0,0,0,0.5)', opacity: 1, y: 0, zIndex: 40 }, '>')
+      .to('#hero-start-button', { opacity: 1, y: 50, scale: 0.85, zIndex: 50 }, '<')
+
+    gsap.utils.toArray('#hero-parallax-menu > *').forEach((elem, i) => {
+      tl.from(elem!, { opacity: 0, y: i === 0 ? -200 : 100, zIndex: -i * 100 }, '>')
+    })
+    tl.to('#hero-start-button', { top: 12, scale: 0.65 }, '+=50%')
+
+    let minutesLabel = document.getElementById('minutes') as HTMLSpanElement
+    let secondsLabel = document.getElementById('seconds') as HTMLSpanElement
+    let totalSeconds = 0
+    setInterval(setTime, 1000)
+
+    function setTime() {
+      ++totalSeconds
+      secondsLabel.innerHTML = pad(totalSeconds % 60)
+      minutesLabel.innerHTML = pad(totalSeconds / 60)
+    }
+
+    function pad(val: number) {
+      var valString = Math.floor(val) + ''
+      if (valString.length < 2) {
+        return '0' + valString
+      } else {
+        return valString
+      }
+    }
+  }
+
+  document.addEventListener('astro:page-load', handleOnLoad)
+</script>

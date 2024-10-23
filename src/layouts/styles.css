@@ -1,0 +1,37 @@
+:root {
+  --primary: 0 84% 60%;
+  --primary-foreground: 0 0% 9%;
+
+  --secondary: 25 95% 53%;
+  --secondary-foreground: 0 0% 9%;
+
+  --background: 0 0% 9%;
+  --background-foreground: 0 0% 90%;
+  --background-border: 0 0% 15%;
+  
+  --card: 0 0% 11%;
+  --card-foreground: 0 0% 90%;
+  --card-border: 0 0% 17.5%;
+
+  --popover: 0 0% 17.5%;
+  --popover-foreground: 0 0% 90%;
+  --popover-border: 0 0% 20%;
+
+  --accent: 350 80% 65%;
+  --accent-foreground: 0 0% 15%;
+
+  --muted: 0 0% 25%;
+  --muted-foreground: 0 0% 80%;
+
+  --danger: 0 70% 55%;
+  --danger-foreground: 0 0% 15%;
+
+  --info: 200 80% 60%;
+  --info-foreground: 0 0% 15%;
+
+  --success: 140 70% 45%;
+  --success-foreground: 0 0% 15%;
+
+  --warning: 45 100% 55%;
+  --warning-foreground: 0 0% 15%;
+}

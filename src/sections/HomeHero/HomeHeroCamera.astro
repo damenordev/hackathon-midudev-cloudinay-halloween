@@ -1,0 +1,142 @@
+<div class="camera">
+  <div class="battery">
+    <div class="juice"></div>
+  </div><!-- end div.battery -->
+  <div class="rec">
+    <span><span></span>REC</span>
+  </div><!-- end div.rec -->
+  <div class="meta">
+    <p>
+      F2.3&nbsp;&nbsp;0dB&nbsp;&nbsp;15.7V
+      <span class="exposure">
+        <span class="plus">+</span>
+        <span class="minus">-</span>
+      </span>
+    </p>
+  </div><!-- end div.meta -->
+  <div class="timer">
+    <label id="hours">00</label>:
+    <label id="minutes">00</label>:
+    <label id="seconds">00</label>
+  </div><!-- end div.timer -->
+</div>
+
+<style>
+  /*-- camera details --*/
+  .camera {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: 30;
+    pointer-events: none;
+  }
+  .battery {
+    position: absolute;
+    top: 24px;
+    left: 48px;
+    width: 80px;
+    height: 34px;
+    border: 2px solid white;
+    border-radius: 5px;
+    padding: 4px;
+    box-sizing: border-box;
+  }
+  .battery:after {
+    content: ' ';
+    background: white;
+    width: 5px;
+    height: 21px;
+    position: absolute;
+    right: -10px;
+    border-radius: 0px 2px 2px 0px;
+    top: 4px;
+  }
+  .juice {
+    background: red;
+    width: 15%;
+    height: 100%;
+    animation: blinky 1s ease-in-out infinite;
+    animation-delay: 2s;
+  }
+  @keyframes blinky {
+    0% {
+      background: transparent;
+    }
+    49% {
+      background: transparent;
+    }
+    50% {
+      background: red;
+    }
+  }
+  .rec {
+    position: absolute;
+    right: 64px;
+    top: 20px;
+    color: #fff;
+    font-size: 30px;
+  }
+  .rec span span {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    background: red;
+    border-radius: 50%;
+    margin-right: 10px;
+    animation: blinky 1s ease-in-out infinite;
+  }
+  .meta {
+    position: absolute;
+    bottom: 48px;
+    right: 64px;
+    color: #fff;
+    font-size: 20px;
+    letter-spacing: 1px;
+  }
+  .exposure {
+    border: 2px solid #fff;
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    position: relative;
+    top: 3px;
+    margin-left: 0px;
+  }
+  .exposure:after {
+    content: ' ';
+    position: absolute;
+    width: 0px;
+    display: block;
+    height: 0px;
+    top: 0px;
+    right: 0px;
+    border-left: 0px solid transparent;
+    border-right: 20px solid white;
+    border-bottom: 0px solid transparent;
+    border-top: 20px solid transparent;
+  }
+  .exposure span {
+    font-size: 12px;
+  }
+  .exposure span.plus {
+    position: absolute;
+    top: -2px;
+    left: 2px;
+  }
+  .exposure span.minus {
+    color: #371c3b;
+    position: absolute;
+    z-index: 1;
+    right: 0px;
+    font-size: 17px;
+    bottom: -5px;
+  }
+  .timer {
+    position: absolute;
+    bottom: 48px;
+    left: 30px;
+    color: #fff;
+    font-size: 20px;
+    letter-spacing: 1px;
+  }
+</style>

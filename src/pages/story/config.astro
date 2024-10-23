@@ -1,0 +1,194 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import { ContainerWave, Dropdown } from '@/ui'
+import { supabase } from '@/utils'
+import StoryConfigForm from '@/components/StoryConfigForm.astro'
+
+const { data: user } = await supabase.auth.getUser()
+
+const image = user?.user?.user_metadata?.avatar_url
+---
+
+<Layout title="Configuración">
+  <div class="fixed top-0 left-0 w-full flex items-center justify-between gap-4 p-4 z-40">
+    <div>
+      <a
+        class="size-10 bg-background border-4 border-background-border rounded-2xl flex items-center justify-center z-40 transition-colors duration-300 active:scale-95 hover:bg-card"
+        href="/"
+      >
+        <svg class="size-6" stroke-width="2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="currentColor">
+          <path d="M15 6L9 12L15 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </a>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <img class="size-10 rounded-2xl z-30 border-4 border-background-foreground" src={image} alt="Avatar" />
+      <!-- <SignOut /> -->
+    </div>
+  </div>
+  <ContainerWave>
+    <StoryConfigForm />
+  </ContainerWave>
+
+  <div id="generating-story-modal" class="hidden fixed top-0 left-0 w-full h-full items-center justify-center z-[100]">
+    <div class="absolute inset-0 w-full h-full backdrop-blur-xl bg-[#00000075] animate-fade-in"></div>
+    <div class="bg-card z-10 rounded-3xl p-12 border-4 border-background-border shadow-lg animate-fade-in">
+      <h2 class="text-6xl font-bold text-center font-creepster text-primary">Generando</h2>
+      <p class="text-sm text-muted-foreground text-center max-w-[70%] text-balance mx-auto">Espera un momento mientras generamos tu historia...</p>
+      <div class="flex flex-col gap-1 mt-8 bg-popover p-4 rounded-lg">
+        <div class="flex items-center justify-between gap-8">
+          <span class="text-xl">Texto de la historia</span>
+          <svg id="story-text-loading" class="size-4 animate-spin" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="currentColor">
+            <path
+              d="M12 22C6.477 22 2 17.523 2 12H0C0 17.523 4.477 22 10 22V22Z"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"></path>
+          </svg>
+          <svg
+            id="story-text-success"
+            class="hidden size-5 text-emerald-400"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            color="currentColor"
+          >
+            <path d="M5 13L9 17L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </div>
+        <div class="flex items-center justify-between gap-8">
+          <span class="text-xl">Imagenes</span>
+          <svg id="story-images-loading" class="size-4 animate-spin" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="currentColor">
+            <path
+              d="M12 22C6.477 22 2 17.523 2 12H0C0 17.523 4.477 22 10 22V22Z"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"></path>
+          </svg>
+          <svg
+            id="story-images-success"
+            class="hidden size-5 text-emerald-400"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            color="currentColor"
+          >
+            <path d="M5 13L9 17L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  import { actions } from 'astro:actions'
+
+  import { IMAGE_STYLES_OPTIONS } from '@/constants'
+  import type { TImageStyle, IStoryInitialParams } from '@/types'
+  import { initContainerWave } from '@/ui/container/container-wave.script'
+
+  const main = document.querySelector('.container-wave') as HTMLElement
+  const selectMonster = document.querySelector('#monster-select') as HTMLElement
+  const groundText = document.querySelector('#ground__text') as HTMLElement
+  const groundGroup = document.querySelector('#ground__group') as HTMLElement
+  const groundWave = document.querySelector('.ground__wave') as HTMLElement
+
+  initContainerWave({ main, selectMonster, groundText, groundGroup, groundWave })
+
+  const storyConfigForm = document.getElementById('story-config-form') as HTMLFormElement
+  const generateStoryButton = document.getElementById('generate-story-button') as HTMLButtonElement
+  const imageStylesOptionsButtons = document.querySelectorAll('.story-image-style-option') as NodeListOf<HTMLButtonElement>
+  const generatingStoryModal = document.getElementById('generating-story-modal') as HTMLElement
+  const storyTextLoading = document.getElementById('story-text-loading') as HTMLElement
+  const storyTextSuccess = document.getElementById('story-text-success') as HTMLElement
+  const storyImagesLoading = document.getElementById('story-images-loading') as HTMLElement
+  const storyImagesSuccess = document.getElementById('story-images-success') as HTMLElement
+
+  const defaultImageStyleIndex = 1
+  let imageStyleSelected = IMAGE_STYLES_OPTIONS[defaultImageStyleIndex] as TImageStyle
+  imageStylesOptionsButtons[defaultImageStyleIndex].classList.add('opacity-100', 'grayscale-0', 'border-emerald-400')
+
+  const openGeneratingStoryModal = () => {
+    document.body.style.overflow = 'hidden'
+    generatingStoryModal.classList.remove('hidden')
+    generatingStoryModal.classList.add('flex')
+  }
+
+  const closeGeneratingStoryModal = () => {
+    document.body.style.overflow = 'auto'
+    generatingStoryModal.classList.add('hidden')
+    generatingStoryModal.classList.remove('flex')
+  }
+
+  storyConfigForm?.addEventListener('submit', async e => {
+    e.preventDefault()
+    const formData = new FormData(storyConfigForm)
+    formData.append('imageStyle', imageStyleSelected)
+    generateStoryButton.disabled = true
+    generateStoryButton.textContent = 'Generando...'
+
+    openGeneratingStoryModal()
+
+    const { data: initialStory, error: initialStoryError } = await actions.generateInitialStory(formData)
+    console.log({ initialStory, initialStoryError })
+    const storyData = initialStory.data
+
+    storyTextLoading.classList.add('hidden')
+    storyTextSuccess.classList.remove('hidden')
+
+    const storyId = initialStory.id
+
+    const characters = storyData.characters
+    const secondaryCharacters = characters.secondaryCharacters
+
+    const imagesPrompt = [
+      { imageName: 'cover', prompt: storyData.cover },
+      { imageName: 'protagonist', prompt: characters.protagonist.imagePrompt },
+      { imageName: 'antagonist', prompt: characters.antagonist.imagePrompt },
+      ...(secondaryCharacters?.map((character: any) => ({
+        imageName: `secondary-${character.name.toLowerCase().replace(/\s+/g, '-')}`,
+        prompt: character.imagePrompt,
+      })) ?? []),
+    ]
+
+    const imagesPromises: Promise<any>[] = []
+
+    for (const image of imagesPrompt) {
+      imagesPromises.push(actions.generateImage({ prompt: image.prompt, storyId, imageName: image.imageName }))
+    }
+
+    const imagesResponse = await Promise.all(imagesPromises).catch(error => console.error('Error generating images:', error))
+
+    const imageUrls = imagesResponse?.reduce((acc, { data }: any) => {
+      acc[data.imageName] = data.imageUrl
+      return acc
+    }, {})
+
+    const storyUpdated = await actions.updateStory({ storyId, data: { ...storyData, imageUrls } })
+
+    storyImagesLoading.classList.add('hidden')
+    storyImagesSuccess.classList.remove('hidden')
+
+    generateStoryButton.disabled = false
+    generateStoryButton.textContent = 'Generar historia'
+
+    window.location.href = `/story/chat/${initialStory.slug}`
+
+    closeGeneratingStoryModal()
+  })
+
+  imageStylesOptionsButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      imageStylesOptionsButtons.forEach(button => button.classList.remove('opacity-100', 'grayscale-0', 'border-emerald-400'))
+      imageStyleSelected = button.dataset.value as TImageStyle
+      button.classList.add('opacity-100', 'grayscale-0', 'border-emerald-400')
+      console.log({ imageStyleSelected })
+    })
+  })
+</script>

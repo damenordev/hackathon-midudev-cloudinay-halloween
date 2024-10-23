@@ -1,0 +1,51 @@
+---
+import Spider from '@/components/shared/Spider.astro'
+import PumpkinAnimated from '@/components/shared/PumpkinAnimated.astro'
+import { SliderParallax } from '@/ui'
+
+const swiperItems = [
+  {
+    title: 'Ghastly Ghost Tours',
+    description:
+      'Explore the dark history of Ravenwood Manor with guided tours through its haunted halls. Who knows what you might encounter in the shadowy corners?',
+    image: 'https://github.com/ecemgo/mini-samples-great-tricks/assets/13468728/943f5f64-3718-4d72-b4d0-d9f5a2b8af8e',
+  },
+  {
+    title: 'Wicked Costume Contest',
+    description: 'Dress to impress in your most scary, creative, or weird Halloween costume. Prizes will be awarded to the best-dressed attendees.',
+    image: 'https://github.com/ecemgo/mini-samples-great-tricks/assets/13468728/78ccffdf-c873-486b-ada5-55e4cc0d4fb9',
+  },
+  {
+    title: 'Spooky Dance Floor',
+    description: 'Dance the night away to hauntingly good tunes from our live DJ, under the dim glow of scary candlelight.',
+    image: 'https://github.com/ecemgo/mini-samples-great-tricks/assets/13468728/3b936c77-625f-4587-bf1c-368a2074eb06',
+  },
+  {
+    title: 'Sinister Snacks',
+    description: 'Satisfy your taste buds with a variety of spooky-themed snacks and refreshments at our chillingly delightful food stalls.',
+    image: 'https://github.com/ecemgo/mini-samples-great-tricks/assets/13468728/e0adf8a6-c25e-4f15-bab9-5f4a41a5063f',
+  },
+  {
+    title: 'Scary Movie Screening',
+    description: 'Sit back and relax in our indoor cinema as we showcase classic horror films for your enjoyment.',
+    image: 'https://github.com/ecemgo/mini-samples-great-tricks/assets/13468728/158d56ce-8720-495f-9b44-68551e374eed',
+  },
+  {
+    title: 'Pumpkin Carving',
+    description: "Get your hands dirty and create your own Jack-O'Lantern masterpiece. We provide the pumpkins and carving tools.",
+    image: 'https://github.com/ecemgo/mini-samples-great-tricks/assets/13468728/feea059e-0dca-45cc-9c5c-7c78fa4d8a29',
+  },
+]
+---
+
+<section class="w-full h-screen relative py-8 bg-card z-20">
+  <Spider />
+  <div class="absolute -top-[300px] left-0 w-full h-[300px] bg-gradient-to-b from-transparent via-transparent to-primary/10"></div>
+  <div class="w-full h-full max-w-screen-md mx-auto py-24 px-4 flex flex-col items-center gap-4">
+    <h3 class="text-8xl font-creepster text-primary uppercase mb-8">últimas historias</h3>
+    <SliderParallax swiperItems={swiperItems} />
+  </div>
+  <div class="absolute left-4 bottom-0">
+    <PumpkinAnimated />
+  </div>
+</section>

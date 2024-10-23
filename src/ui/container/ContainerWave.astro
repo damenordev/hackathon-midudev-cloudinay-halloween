@@ -1,0 +1,285 @@
+<section class="container-wave">
+  <div class="bats -translate-y-56">
+    <svg class="animate-fade-in-up" id="bat-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15000 15000">
+      <path
+        id="bat-1"
+        d="M2035 25a684 684 0 0 1-504 501l-68-228-73 77c-24-21-126-21-150 0l-73-77-68 228A686 686 0 0 1 595 25 675 675 0 0 1 35 280c156 16 307 116 306 268 91-26 194-36 274 13 86 52 125 161 128 260 220-155 413 92 510 337 4-17 16-76 62-139 38 51 51 96 62 139 98-248 291-491 510-337 7-212 139-348 402-273-1-154 153-252 306-268-246 2-433-96-560-255z"
+      ></path>
+      <use href="#bat-1" id="bat-2"></use>
+      <use href="#bat-1" id="bat-3"></use>
+      <use href="#bat-1" id="bat-4"></use>
+      <use href="#bat-1" id="bat-5"></use>
+      <use href="#bat-1" id="bat-6"></use>
+      <use href="#bat-1" id="bat-7"></use>
+    </svg>
+  </div>
+  <div class="ground">
+    <div class="ground__wave">
+      <svg id="wave-svg" viewBox="0 0 500 120" preserveAspectRatio="none">
+        <path id="wave" d="M-0.84,61.69 C194.41,19.25 199.48,122.88 500.27,79.45 L500.00,150.00 L0.00,150.00 Z"></path>
+        <text id="ground__group">
+          <textpath id="ground__text" href="#wave" text-anchor="middle" startOffset="22.5%"></textpath>
+        </text>
+      </svg>
+    </div>
+    <div class="bg-background w-full">
+      <slot />
+    </div>
+  </div>
+</section>
+
+<style lang="scss">
+  @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Nunito:wght@200;300;400;500;600;700;800;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@800&family=Gamja+Flower&family=Lakki+Reddy&family=Nosifer&family=Rock+Salt&family=Sniglet:wght@800&family=Sue+Ellen+Francisco&family=Walter+Turncoat&display=swap');
+
+  $main: 'Lakki Reddy', cursive;
+  $sub: 'Gamja Flower', cursive;
+  $max-content: 58.125rem;
+
+  $midnight-blue: hsla(245, 50%, 26%, 1);
+  $spanish-violet: hsla(258, 50%, 30%, 1);
+  $ksu-purple: hsla(269, 53%, 33%, 1);
+  $rebecca-purple: hsla(273, 53%, 37%, 1);
+  $white: hsla(150, 100%, 100%, 1);
+  $white-alpha: hsla(150, 100%, 100%, 0.5);
+  $alice-blue: hsla(212, 100%, 97%, 1);
+  $carrot-orange: hsla(32, 87%, 55%, 1);
+  $prussian-blue: hsla(204, 93%, 11%, 1);
+
+  .container-wave {
+    overflow-x: hidden;
+    position: relative;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: space-between;
+    background: radial-gradient(
+        circle at 50% 70%,
+        $white 0,
+        $white 10rem,
+        $rebecca-purple 10.1rem,
+        $rebecca-purple 20rem,
+        $ksu-purple 20.1rem,
+        $ksu-purple 30rem,
+        $spanish-violet 30.1rem,
+        $spanish-violet 40rem,
+        $midnight-blue 40.1rem
+      )
+      no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+
+    // font-family: $main;
+    // font-size: 2rem;
+    // line-height: 3.5rem;
+    // color: $alice-blue;
+    // text-align: center;
+
+    // a {
+    //   color: inherit;
+    //   text-decoration: none;
+    // }
+  }
+
+  .bats {
+    position: fixed;
+    width: $max-content;
+    height: 100%;
+    fill: transparent;
+
+    @for $i from 2 through 7 {
+      #bat-#{$i} {
+        fill: $prussian-blue;
+        fill: #111;
+        transform-origin: 50% 50%;
+      }
+    }
+
+    #bat-2 {
+      x: 10%;
+      y: 10%;
+      transform: rotate(-10deg) scale(0.45);
+      filter: opacity(0.75);
+    }
+
+    #bat-3 {
+      x: 30%;
+      y: 30%;
+      transform: rotate(10deg) scale(0.35);
+      filter: opacity(0.55);
+    }
+
+    #bat-4 {
+      x: 90%;
+      y: -10%;
+      transform: rotate(-20deg) scale(0.55);
+      filter: opacity(0.95);
+    }
+
+    #bat-5 {
+      x: 70%;
+      y: 5%;
+      transform: rotate(20deg) scale(0.45);
+      filter: opacity(0.75);
+    }
+
+    #bat-6 {
+      x: 0%;
+      y: 55%;
+      transform: rotate(20deg) scale(0.25);
+      filter: opacity(0.35);
+    }
+
+    #bat-7 {
+      x: 60%;
+      y: 60%;
+      transform: rotate(-20deg) scale(0.25);
+      filter: opacity(0.15);
+    }
+  }
+
+  .sky {
+    position: absolute;
+    top: 10%;
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    justify-content: center;
+
+    .title.orange {
+      color: $carrot-orange;
+      font-size: 4rem;
+      line-height: 4rem;
+    }
+  }
+
+  .ground {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    height: 100%;
+    padding-top: 64px;
+
+    &__wave {
+      width: 100vw;
+      fill: $prussian-blue;
+      @apply fill-background;
+      font-size: 4.5rem;
+
+      svg {
+        width: 100vw;
+        height: 0%;
+        //needed so text isn't cut off from svg bounding box
+        overflow: visible;
+      }
+    }
+
+    #ground__group {
+      transform-origin: 50% 50%;
+      transform: translate3d(0, 0, 0);
+      backface-visibility: hidden;
+      perspective: 1000px;
+      animation: ghost 5s infinite linear alternate;
+
+      @keyframes ghost {
+        0% {
+          transform: translate(0, -30%);
+          filter: blur(0.5rem);
+          opacity: 0;
+        }
+
+        100% {
+          transform: translate(0, -10%);
+          opacity: 0.2;
+        }
+      }
+
+      @keyframes ghoul {
+        0% {
+          transform: translate(0, 70%) rotate(25deg);
+        }
+
+        70% {
+          transform: translate(0, 0);
+        }
+      }
+
+      @keyframes marshmallow {
+        0% {
+          transform: translateY(-5%) skewX(5deg) scale(1.02);
+        }
+
+        50% {
+          transform: translateY(-5.5%) skewX(-5deg) scale(0.98);
+        }
+      }
+
+      @keyframes vampire {
+        0% {
+          transform: translate(0, 0%);
+        }
+
+        100% {
+          transform: translate(0, -10%);
+        }
+      }
+
+      @keyframes werewolf {
+        50% {
+          text-shadow:
+            0 0.025em 0.01em $prussian-blue,
+            0.025em -0.025em 0.01em $prussian-blue,
+            0.025em 0 0.01em $prussian-blue,
+            -0.025em 0.025em 0.01em $prussian-blue;
+        }
+      }
+
+      @keyframes skeleton {
+        20% {
+          transform: translate3d(-1px, -1px, 0);
+        }
+
+        80% {
+          transform: translate3d(1px, 0, 1px);
+        }
+      }
+    }
+  }
+
+  @media (max-height: 400px) {
+    main {
+      background: radial-gradient(
+          circle at 50% 70%,
+          $white 0,
+          $white 5rem,
+          $rebecca-purple 5.1rem,
+          $rebecca-purple 10rem,
+          $ksu-purple 10.1rem,
+          $ksu-purple 15rem,
+          $spanish-violet 15.1rem,
+          $spanish-violet 20rem,
+          $midnight-blue 20.1rem
+        )
+        no-repeat center center fixed;
+    }
+
+    .containera {
+      transform: scale(0.5);
+      .sky {
+        margin-top: -12%;
+      }
+    }
+
+    .ground__wave {
+      svg {
+        margin-bottom: -25%;
+        width: 200vw;
+        height: 200vh;
+      }
+    }
+  }
+</style>
