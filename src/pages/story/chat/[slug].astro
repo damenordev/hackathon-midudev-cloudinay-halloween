@@ -275,7 +275,8 @@ console.log({ story, dataTable, userMetadata, userChannel })
 
   generateVideoButton?.addEventListener('click', async () => {
     showGeneratingStoryModal()
-    const { data } = await actions.generateVideoTranscribed({ storyId: storyId.value })
+    const { data, error } = await actions.generateVideoTranscribed({ storyId: storyId.value })
+    if (error) return hideGeneratingStoryModal()
     videoSummary.src = data?.responseUpload.secure_url || ''
     videoModal.classList.remove('hidden')
     videoModal.classList.add('flex')

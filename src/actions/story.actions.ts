@@ -122,15 +122,15 @@ export const handleGenerateVideoTranscribed = async ({ storyId }: { storyId: str
       // transformation: [{ overlay: { resource_type: 'subtitles', public_id: `${folder}/${public_id}.transcript` } }, { flags: 'layer_apply' }],
     })
 
-    const videoTransformated = await cloudinary.url(responseUpload.public_id, {
-      fallback_content: "Your browser does not support HTML5 video tags",
-      transformation: [{ overlay: { resource_type: 'subtitles', public_id: `${folder}/${public_id}.transcript` } }, { flags: 'layer_apply' }],
-    })
+    // const videoTransformated = await cloudinary.url(responseUpload.public_id, {
+    //   fallback_content: "Your browser does not support HTML5 video tags",
+    //   transformation: [{ overlay: { resource_type: 'subtitles', public_id: `${folder}/${public_id}.transcript` } }, { flags: 'layer_apply' }],
+    // })
 
     // const video = await cloudinary.video(responseUpload.public_id, {
     //   transformation: [{ overlay: { resource_type: 'subtitles', public_id: `${public_id}.transcript` } }, { flags: 'layer_apply' }],
     // })
-    return { responseUpload, videoTransformated }
+    return { responseUpload }
   } catch (error) {
     if (error instanceof Error) throw new Error(`Failed to generate video transcribed: ${error.message}`)
     throw new Error('Failed to generate video transcribed: Unknown error')
